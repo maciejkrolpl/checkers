@@ -23,15 +23,17 @@ public class ConsoleView {
 
     private void printBoard() {
 
+        int size = gameController.getSIZE();
+
         System.out.print("  ");
-        for (int i = 0; i < 8; i++) {
+        for (int i = 0; i < size; i++) {
             System.out.print((i + 1) + " ");
         }
         System.out.println();
 
-        for (int i = 0; i < 8; i++) {
+        for (int i = 0; i < size; i++) {
             System.out.print((i + 1) + " ");
-            for (int j = 0; j < 8; j++) {
+            for (int j = 0; j < size; j++) {
                 switch (gameController.getGameboard()[i][j]) {
                     case RED:
                         System.out.print(ANSI_RED);
@@ -58,7 +60,7 @@ public class ConsoleView {
                         break;
                 }
             }
-            if (i == 7) {
+            if (i == size-1) {
                 System.out.print(ANSI_RED);
                 System.out.print("        Czerwonych pionków: " + gameController.getRedPiecesCount());
                 System.out.print(ANSI_RESET);
@@ -87,11 +89,7 @@ public class ConsoleView {
         int pieceToMove;
         String s;
 
-        if (piece == Piece.RED) {
-            System.out.print(ANSI_RED);
-        } else {
-            System.out.print(ANSI_BLACK);
-        }
+        getColor(piece);
 
         do {
 
@@ -138,14 +136,36 @@ public class ConsoleView {
 
     }
 
+    private void getColor(Piece piece) {
+        if (piece == Piece.RED) {
+            System.out.print(ANSI_RED);
+        } else {
+            System.out.print(ANSI_BLACK);
+        }
+    }
+
     public void run() {
 
         while (true) {
             printBoard();
             getMove(Piece.RED);
+            if (gameController.getBlackPiecesCount() == 0) {
+                printWinner(Piece.RED);
+                break;
+            }
             printBoard();
             getMove(Piece.BLACK);
+            if (gameController.getRedPiecesCount() == 0) {
+                printWinner(Piece.BLACK);
+                break;
+            }
         }
 
+    }
+
+    private void printWinner(Piece piece) {
+        getColor(piece);
+        String winner = (piece == Piece.RED) ? "czerwony" : "czarny";
+        System.out.println("Gratulacje! Wygrał gracz " + winner);
     }
 }

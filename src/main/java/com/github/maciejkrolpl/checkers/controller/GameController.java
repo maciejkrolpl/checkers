@@ -22,6 +22,10 @@ public class GameController {
         return board;
     }
 
+    public int getSIZE() {
+        return board.getSIZE();
+    }
+
     public int getRedPiecesCount() {
         return board.getRedPiecesCount();
     }
